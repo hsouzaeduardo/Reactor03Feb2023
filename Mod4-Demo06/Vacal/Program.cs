@@ -64,14 +64,14 @@ namespace Vacal
 
                 if (isGpt)
                 {
-                    if(texto.Length > 0)
+                    if (texto.Length > 0)
                         await Gpt(texto);
                 }
                 Task.Delay(5000);
                 pergunta = isGpt ? "Faça uma pergunta !" : "Falai alguma coisa:";
                 Console.WriteLine(pergunta);
             }
-           
+
         }
 
         static async Task Gpt(string texto)
@@ -79,7 +79,7 @@ namespace Vacal
 
             HttpClient client = new HttpClient();
 
-            client.DefaultRequestHeaders.Add("authorization", "Bearer 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");
+            client.DefaultRequestHeaders.Add("authorization", "Bearer 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");
             // string texto2 = Console.ReadLine();
             var content = new StringContent("{\"model\": \"text-davinci-002\", \"prompt\": \"" + texto + "\",\"temperature\": 1,\"max_tokens\": 100}",
                 Encoding.UTF8, "application/json");
@@ -91,11 +91,13 @@ namespace Vacal
             try
             {
                 var dyData = JsonConvert.DeserializeObject<GPT>(responseString);
-
-                string responseGPT = dyData!.choices[0].text;
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(responseGPT);
-                Console.ResetColor();
+                if (dyData!.choices != null)
+                {
+                    string responseGPT = dyData!.choices[0].text;
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(responseGPT);
+                    Console.ResetColor();
+                }
 
             }
             catch (Exception ex)
